@@ -12,7 +12,7 @@ const StatCard = ({
   )
   const isDecrement = trend === 'decrement';
   return (
-    <article>
+    <article className='stats-card'>
       <h3 className='text-base font-medium'>
         {headerTitle}
       </h3>
@@ -29,9 +29,14 @@ const StatCard = ({
                 {Math.round(percentage)}%
               </figcaption>
             </figure>
+            <p className='text-sm font-medium text-gray-100 truncate'>vs Last Month</p>
           </div>
         </div>
+        <img 
+        className='xl:w-32 w-full h-full md:h-32 xl:h-full' 
+        src={`/assets/icons/${isDecrement ? 'decrement.svg': 'increment.svg'}`} alt="" />
       </div>
+
     </article>
   )
 }
