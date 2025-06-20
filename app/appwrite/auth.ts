@@ -2,6 +2,7 @@ import { ID, OAuthProvider, Query } from "appwrite";
 import { account, database, appwriteConfig } from "~/appwrite/client";
 import { redirect } from "react-router";
 
+
 export const getExistingUser = async (id: string) => {
     try {
         const { documents, total } = await database.listDocuments(
@@ -26,20 +27,27 @@ export const storeUserData = async () => {
             ? await getGooglePicture(providerAccessToken)
             : null;
 
+        // Check if user already exists
+        // const existingUser = await getExistingUser(user.$id);
+        // if (existingUser) return existingUser;
+
         const createdUser = await database.createDocument(
             appwriteConfig.databaseId,
             appwriteConfig.userCollectionId,
             ID.unique(),
             {
-                accountId: user.$id,
-                email: user.email,
-                name: user.name,
-                imageUrl: profilePicture,
-                joinedAt: new Date().toISOString(),
+            accountId: user.$id,
+            email: user.email,
+            name: user.name,
+            imageUrl: profilePicture,
+            joinedAt: new Date().toISOString(),
             }
         );
 
         if (!createdUser.$id) redirect("/sign-in");
+        console.log(createdUser, "User data stored successfully");
+        // return createdUser;
+        
     } catch (error) {
         console.error("Error storing user data:", error);
     }

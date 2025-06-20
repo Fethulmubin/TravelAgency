@@ -1,21 +1,19 @@
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons'
 import React from 'react'
 import { Link, redirect } from 'react-router'
-import { loginWithGoogle } from '~/appwrite/auth'
+import { loginWithGoogle, storeUserData } from '~/appwrite/auth'
 import { account } from '~/appwrite/client'
 
 
-export async function loader() {
+export async function clientLoader() {
     try {
-        // Check for existing session instead of directly accessing account
-        const session = await account.getSession('current').catch(() => null)
-        if (session) {
-            return redirect('/')
-        }
-        return null
-    } catch (error) {
-        console.log("Loader error:", error)
-        return null
+        const user = await account.get();
+        console.log(user)
+
+        if(user.$id) return redirect('/');
+        
+    } catch (e) {
+        console.log('Error fetching user', e)
     }
 }
 const SignIn = () => {
